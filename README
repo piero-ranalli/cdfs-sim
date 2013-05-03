@@ -1,0 +1,222 @@
+cdfs-sim: The XMM-CDFS simulator
+    This is a general purpose, multi-mission X-ray simulator. It has been
+    written to produce simulations of the XMM-Newton survey in the Chandra
+    Deep Field South (the deepest XMM pointing made to date, consisting of
+    33 individual observations centred on the CDFS), which are needed to
+    test the accuracy and completeness of the souce catalogue. Please refer
+    to the paper: Ranalli, Comastri, Carrera, Vignali et al., 2013, (in
+    press on Astronomy and Astrophysics).
+
+    Further information can be found on the website:
+    http://www.astro.noa.gr/~ranalli/simulator .
+
+    The simulator has also been written with the mission project formerly
+    known as XEUS/IXO/Athena in mind, so that it can readily be updated to
+    other mission. The only assumptions are that a library of
+    position-dependent PSFs is available, that the effective area of the
+    telescope and detector is known, and that an exposure map is provided to
+    account for vignetting and eventual chip gaps. A background map can be
+    used to account for the instrumental component.
+
+  Features:
+    * produces event files, to be analyzed with common X-ray data analysis
+    software;
+
+    * supports an arbitrary number of sources;
+
+    * arbitrary spectra can be assigned to the sources;
+
+    * calculates the most appropriate PSF for each source, according to
+    position and energy, by interpolating from the PSF library;
+
+    * reproduces the correct balance of background components (cosmic,
+    particle and residual soft protons).
+
+  DISCLAIMER
+    This software is provided AS IS and with NO WARRANTY, and with very
+    limited support. Please consider it as a BETA version.
+
+Installation
+    You need a working Ftools (https://heasarc.gsfc.nasa.gov/ftools/), XMM
+    SAS (http://xmm.esa.int/sas/) and PDL (http://pdl.perl.org/) environment
+    on a Unix machine (e.g., GNU/Linux or Mac OS X).
+
+    To install Ftools and SAS, please follow instructions on the respective
+    webpages. With SAS, remember to also download the calibration files
+    (CCF). At least the following ones should be present in the $CCTPATH
+    directory:
+
+     XRT1_XAREAEF_0008.CCF
+     XRT2_XAREAEF_0009.CCF
+     XRT3_XAREAEF_0011.CCF
+     XRT1_XPSF_0013.CCF
+     XRT2_XPSF_0013.CCF
+     XRT3_XPSF_0013.CCF
+
+    If you don't have these files or if you have other versions, please
+    download them from the FTP site:
+    ftp://xmm.esac.esa.int/pub/ccf/constituents .
+
+    For PDL, the easiest way to install it in Linux it is from your
+    distribution package manager (e.g. "sudo apt-get install pdl" should
+    probably work on Mint and Ubuntu). For the Mac, the SciPDL distribution
+    offers a one-click installer (see the PDL site); or otherwise you may
+    use Macports or Fink. There is no particular requirement on the PDL
+    version, so just install whatever version your distribution offers.
+
+    To install the simulator, just create a new directory and extract the
+    archive in it. (If you are reading this document, probably you have
+    already done this step, and you may consider the simulator installed).
+
+Documentation
+    The essential documentation is included in the program and may be seen
+    with the command:
+
+    perldoc obsid-sim.pl
+
+    Further info is available on the website
+    http://www.astro.noa.gr/~ranalli/cdfssim and, for the theory behind the
+    simulator, on the Ranalli et al. (2013) paper.
+
+Running the simulator
+    Before running the simulator, you need to have an event file and an
+    exposure map: just use any you have around from XMM-Newton observations.
+    The camera, pointing position, and roll angle will be taken from the
+    event file, while the exposure will be set by the expmap.
+
+    Then, you need a source list. It is an ascii file with four columns, and
+    one row for each source. The columns are:
+
+     1. mos count rate
+     2. pn count rate
+     3. ra
+     4. dec
+
+    The program will warn if any source falls outside the field of view, and
+    will proceed with the sources within the FOV; you may safely ignore
+    these warnings (unless of course you expected all the sources to fall
+    inside the FOV...).
+
+    You need a spectrum: open Xspec (*), define any model, and give the
+    commands:
+
+     XSPEC> iplot model
+     IPLOT> wd spectrum
+
+    and then editing the file spectrum.qdp to remove the commands (READ SERR
+    etc.) at its beginning.
+
+    An example source list (counts-pos.dat) and spectrum
+    (gamma1.7nh2e20.qdp) are included in the package. (NB the count rates in
+    the example list are extremely faint and the positions are in the CDFS -
+    it's just to show the file format).
+
+    (*) Xspec may be obtained together with the Ftools from
+    http://heasarc.gsfc.nasa.gov/docs/software/lheasoft/download.html . It
+    is not a requisite for running the simulator - just use the example
+    spectrum included here for your tests.
+
+    Finally, choose a name for you output file (the simulated event list)
+    and call the simulator:
+
+     ./obsid-sim.pl \
+     counts-positions.dat spectrum.qdp real-event-file.fits \
+     expmap.fits sim.fits [--pimin=2] [--pimax=10]
+
+    where the file names may be changed (it is only the order that matters)
+    and the square brackets mean that the pimin/pimax parameters are
+    optional; 2 and 10 keV are their default values. The simulator only
+    produces photons inside the pimin/pimax limits; you may freely choose
+    them.
+
+    The simulator should then run for a minute or probably less. The
+    simulated event list should be readable by ds9, Ftools and by any SAS
+    tool (though with warnings sometimes).
+
+Questions and answers
+   > What do you use to calculate the PSF?
+    I use the 2-dimensional PSF images which can be found in the CCFs. There
+    are about one hundred PSF images, valid for different energies and
+    different off-axis angles (and, in recent SASs, for different cameras).
+    The simulator interpolates the PSFs from this library, and rotates the
+    interpolated PSF to match the observation position angle. A user-defined
+    spectrum is used to weight the interpolation.
+
+   > What input does the simulator need?
+    The input to the simulator is:
+
+    * an event file, from which the main details are taken (camera, exposure
+    time, boresight, position angle) * a spectrum * an exposure map * a list
+    of sources (with count rate, ra, dec of each source)
+
+    The spectrum is just an ascii file, which can be produced with xspec by
+    defining a model, a dummyrsp, and giving the commands iplot model; wd
+    spectrum.
+
+   > What output does it provide?
+    The output is an event file, which can be processed (hopefully) like any
+    other XMM-Newton event file.
+
+   > Can I use this simulator for Chandra/eRosita/Athena/any other X-ray
+  mission?
+    Short answer: not yet. Contact me for this.
+
+    Long answer: it is possible by providing the correct input files, and by
+    modifying the source to use relevant calibration files for the effective
+    area and PSF. This is currently hard-wired, and only the XMM CCF format
+    is currently included. Changing this is however simple, so just contact
+    me.
+
+   > What do you use for the input spectrum?
+    Currently, a simple power-law (gamma=1.7) with galactic absorption. It's
+    the same model used for the count-rate to flux conversion in the
+    XMM-CDFS catalogue.
+
+   > Which kind of X-ray events does this program simulate?
+    The complete simulator as used for the Ranalli et al. (2013) paper
+    consists of four programs: - the source+CXB simulator - a background
+    analyzer, to be used on a real observation to determine the
+    CXB-particle-proton fractions - the particle simulator - the proton
+    simulator
+
+    However, currently I am only releasing the first one (source+CXB). The
+    other parts need to be decoupled from the XMM-CDFS simulation pipeline
+    where their development took place, and some time is needed to polish
+    their user interfaces.
+
+   > Can I use this program for my research?
+    Sure! It would be very nice of you to acknowledge its use by citing the
+    paper:
+
+    P. Ranalli, A. Comastri, C. Vignali, F. J. Carrera, N. Cappelluti, R.
+    Gilli, S. Puccetti, W. N. Brandt, H. Brunner, M. Brusa, I.
+    Georgantopoulos, K. Iwasawa, V. Mainieri, "The XMM-Newton deep survey in
+    the Chandra Deep Field South. III. Point source catalogue and number
+    counts in the hard X-rays", 2013, to appear on Astronomy and
+    Astrophysics
+
+   > Can I modify this program?
+    Sure you can, provided you follow the license. It's free software.
+    Please read the COPYING file. The frequently asked questions on the GNU
+    site explain it with an easy language:
+    http://www.gnu.org/licenses/gpl-faq.html
+
+    Since this software is released according to the Affero GPL, it has one
+    further requirement beyond the standard GPL, i.e.: you are obliged by
+    the license to publish your changes to this software in the case you
+    modify the program and provide a network service based on it.
+
+    You might also prefer to start from the public GitHub repository:
+    https://github.com/piero-ranalli/cdfs-sim .
+
+Contact
+     Piero Ranalli
+     National Observatory of Athens
+
+     http://www.astro.noa.gr/~ranalli/
+     piero.ranalli@oabo.inaf.it
+
+    Please let me know if you try this software! Also, please contact me if
+    you need assistance. I can offer only very limited support, but I will
+    be glad to help if possible.
+
