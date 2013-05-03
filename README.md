@@ -1,9 +1,4 @@
-cdfs-sim
-========
-
-A simulator of astronomical X-ray observations.
-
-
+# cdfs-sim: The XMM-CDFS simulator
 
 This is a general purpose, multi-mission X-ray simulator. It has been
 written to produce simulations of the XMM-Newton survey in the Chandra Deep
@@ -37,7 +32,15 @@ software;
  position and energy, by interpolating from the PSF library;
 
 \* reproduces the correct balance of background components (cosmic,
- particle and residual soft protons).
+ particle and residual soft protons) - though this features is not yet
+ included in the public version.
+
+## About this version
+
+This public version only includes the simulations of point sources
+(and cosmic background, if you include a large number of faint sources
+with the correct flux distribution). Simulations of instrumental
+background will be added in the next public verion.
 
 
 

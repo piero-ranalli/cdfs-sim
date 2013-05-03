@@ -30,7 +30,14 @@ cdfs-sim: The XMM-CDFS simulator
     position and energy, by interpolating from the PSF library;
 
     * reproduces the correct balance of background components (cosmic,
-    particle and residual soft protons).
+    particle and residual soft protons) - though this features is not yet
+    included in the public version.
+
+  About this version
+    This public version only includes the simulations of point sources (and
+    cosmic background, if you include a large number of faint sources with
+    the correct flux distribution). Simulations of instrumental background
+    will be added in the next public verion.
 
   DISCLAIMER
     This software is provided AS IS and with NO WARRANTY, and with very
