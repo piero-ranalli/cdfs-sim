@@ -59,7 +59,7 @@ environment on a Unix machine (e.g., GNU/Linux or Mac OS X).
 To install Ftools and SAS, please follow instructions on the
 respective webpages. With SAS, remember to also download the
 calibration files (CCF). At least the following ones should be present
-in the $CCTPATH directory:
+in the $CCFPATH directory:
 
  XRT1_XAREAEF_0008.CCF
  XRT2_XAREAEF_0009.CCF
