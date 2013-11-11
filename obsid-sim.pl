@@ -172,6 +172,9 @@ $offaxis *= 60;  # in arcmin
 my $idx = which($offaxis<=17); # the threshold here is a bit larger
                                # than the one is samplePSF, to allow
                                # the check of alignment
+
+die "No source in Field of View" if ($idx->dim(0) == 0);
+
 $offaxis = $offaxis->index($idx);
 $ra = $ra->index($idx);
 $dec = $dec->index($idx);
