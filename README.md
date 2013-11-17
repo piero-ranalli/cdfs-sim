@@ -5,7 +5,7 @@ written to produce simulations of the XMM-Newton survey in the Chandra
 Deep Field South (the deepest XMM pointing made to date, consisting of
 33 individual observations centred on the CDFS), which are needed to
 test the accuracy and completeness of the souce catalogue. Please
-refer to the paper: ["Ranalli, Comastri, Carrera, Vignali et al., 2013, Astronomy and Astrophysics 555, A42"](#Ranalli, Comastri, Carrera, Vignali et al., 2013, Astronomy and Astrophysics 555, A42).
+refer to the paper: [Ranalli, Comastri, Carrera, Vignali et al., 2013, Astronomy and Astrophysics 555, A42](http://cdsads.u-strasbg.fr/abs/2013A%26A...555A..42R).
 
 The simulator has also been written with the mission project formerly
 known as XEUS/IXO/Athena in mind, so that it can readily be updated to
