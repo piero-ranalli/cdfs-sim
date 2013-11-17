@@ -1,15 +1,11 @@
 # cdfs-sim: The XMM-CDFS simulator
 
 This is a general purpose, multi-mission X-ray simulator. It has been
-written to produce simulations of the XMM-Newton survey in the Chandra Deep
-Field South (the deepest XMM pointing made to date, consisting of 33
-individual observations centred on the CDFS), which are needed to test
-the accuracy and completeness of the souce catalogue. Please refer to
-the paper: Ranalli, Comastri, Carrera, Vignali et al., 2013, (in press
-on Astronomy and Astrophysics).
-
-Further information can be found on the website:
-http://www.astro.noa.gr/~ranalli/simulator .
+written to produce simulations of the XMM-Newton survey in the Chandra
+Deep Field South (the deepest XMM pointing made to date, consisting of
+33 individual observations centred on the CDFS), which are needed to
+test the accuracy and completeness of the souce catalogue. Please
+refer to the paper: ["Ranalli, Comastri, Carrera, Vignali et al., 2013, Astronomy and Astrophysics 555, A42"](#Ranalli, Comastri, Carrera, Vignali et al., 2013, Astronomy and Astrophysics 555, A42).
 
 The simulator has also been written with the mission project formerly
 known as XEUS/IXO/Athena in mind, so that it can readily be updated to
