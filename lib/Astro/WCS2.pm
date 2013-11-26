@@ -1,26 +1,47 @@
-# the XMM-CDFS simulator of astronomical X-ray observations                                                                      
-# Copyright (C) 2013 Piero Ranalli                                                                                               
-#                                                                                                                                
-#  This program is free software: you can redistribute it and/or modify                                                          
-#  it under the terms of the GNU Affero General Public License as                                                                
-#  published by the Free Software Foundation, either version 3 of the                                                            
-#  License, or (at your option) any later version.                                                                               
-#                                                                                                                                
-#  This program is distributed in the hope that it will be useful,                                                               
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of                                                                
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                                                                 
-#  GNU Affero General Public License for more details.                                                                           
-#                                                                                                                                
-#  You should have received a copy of the GNU Affero General Public License                                                      
-#  along with this program.  If not, see <http://www.gnu.org/licenses/>.                                                         
-
-
-# WCS.pm -- aggiornamento 2012/1/11 (aggiunta tgwcstranfL)
-# WCS.pm -- versione 2010/06/17
+# the XMM-CDFS simulator of astronomical X-ray observations
+# Copyright (C) 2013 Piero Ranalli
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 =head1 NAME
 
 WCS2.pm  -- WCS conversion utilities
+
+=cut
+
+package WCS2;
+
+use Carp;
+use Exporter;
+@ISA = 'Exporter';
+
+# most useful functions:
+@EXPORT = qw/tgwcstransf tgwcstransfL wcstransf wcstransfinv
+wcs_evt_transfinv wcstransf_cd wcstransfinv_cd wcs_evt_transf/;
+
+# old functions which might be removed in the future:
+# the first two are only used by Stack.pm, the third is obsolete
+@EXPORT_OK = qw/pdlwcstransf pdlwcstransfinv wcs_evt_deg_transfinv/;
+
+
+=head1 VERSION
+
+2.31 (2013/8/11)
+
+=cut
+
+our $VERSION = '2.31';
 
 =head1 SYNOPSYS
 
@@ -297,6 +318,7 @@ sub wcstransfinv { # viceversa la reazione inversa
 
 
 sub pdlwcstransf { # (template image, xpixel, ypixel)
+    use PDL;
     use PDL::NiceSlice;
 
     # returns: array with RA,DEC
@@ -305,7 +327,7 @@ sub pdlwcstransf { # (template image, xpixel, ypixel)
                                # param is a hash
 
     unless (defined($pixel)) {
-	barf "did you forget \& while calling t_code?";
+	carp "did you forget \& while calling t_code?";
 	return;
     }
 
@@ -757,7 +779,7 @@ This format is used by ds9 when saving FITS images.
 }
 
 sub wcstransfinv_cd { # viceversa la reazione inversa
-    use PDL::Slatec;
+    require PDL::Slatec;
     # (template image, ra, dec)
     # returns: array with p1,p2 (pixel)
 
@@ -941,7 +963,10 @@ __END__
 Functions are not checking for the existence of their needed keywords
 (nor for the sanity of the input).
 
-This should be organized as a proper package.
+This is not yet well organized as a proper package. E.g.: strict and warnings are off,
+PDL is a dependency when it should not be.
+
+Tests are missing.
 
 Only special cases are implemented here, while the FITS standard/AIPS
 convention comprises many more projections.
@@ -990,4 +1015,24 @@ First functions written about year 2005.
   on the XMM-CDFS ratemap (whose WCS is that of a NicoNew's expmap)
   for values of (RA,DEC) = (53.1271160027375,-28.0729683940378).
   I think that all other functions should also immediately switch to radiants.
+
+2.31 -- 2013/8/11
+  put in proper module distribution
+  use strict and warnings experimentally turned on
+
+=head1 AUTHOR
+
+Piero Ranalli, C<< <piero.ranalli at noa.gr> >>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to C<piero.ranalli at noa.gr>.
+
+
+=head1 SUPPORT
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc WCS2
+
 =cut

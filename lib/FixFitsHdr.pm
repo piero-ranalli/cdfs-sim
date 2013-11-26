@@ -1,18 +1,18 @@
-# the XMM-CDFS simulator of astronomical X-ray observations                                                                      
-# Copyright (C) 2013 Piero Ranalli                                                                                               
-#                                                                                                                                
-#  This program is free software: you can redistribute it and/or modify                                                          
-#  it under the terms of the GNU Affero General Public License as                                                                
-#  published by the Free Software Foundation, either version 3 of the                                                            
-#  License, or (at your option) any later version.                                                                               
-#                                                                                                                                
-#  This program is distributed in the hope that it will be useful,                                                               
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of                                                                
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                                                                 
-#  GNU Affero General Public License for more details.                                                                           
-#                                                                                                                                
-#  You should have received a copy of the GNU Affero General Public License                                                      
-#  along with this program.  If not, see <http://www.gnu.org/licenses/>.                                                         
+# the XMM-CDFS simulator of astronomical X-ray observations
+# Copyright (C) 2013 Piero Ranalli
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Affero General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Affero General Public License for more details.
+#
+#  You should have received a copy of the GNU Affero General Public License
+#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
@@ -133,12 +133,13 @@ sub fixfitshdr {
 	$pfiles = Piero::Ftools::Pfiles->new;
     }
 
+    my $fixhdrdat = $$opt{FIXHDRDAT} // 'cdfs-sim-fixhdr1.dat';
 
     $pf = $pfiles->env;  # global
 
     # delete the continue keywords, set creator and exp_id
-    system("$pf fthedit $outfile+0 @/Volumes/data/SIM-CDFS/Data/cdfs-sim-fixhdr1.dat");
-    system("$pf fthedit $outfile+1 @/Volumes/data/SIM-CDFS/Data/cdfs-sim-fixhdr1.dat");
+    system("$pf fthedit $outfile+0 @$fixhdrdat");
+    system("$pf fthedit $outfile+1 @$fixhdrdat");
 
     # aggiungere all'estensione +0 anche le keyword INSTRUME,RA_PNT,DEC_PNT,PA_PNT,DATE-OBS
     my $tmp1 = mktemp('ftoolstmp-XXXXXX');

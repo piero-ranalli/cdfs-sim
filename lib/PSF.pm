@@ -26,6 +26,8 @@ PSF -- manipulation of XMM PSFs
 =head1 SYNOPSIS
 
 my $psf = PSF->new($offaxis,$energy[,$camera][,$oldpsf]);
+ # $offaxis in arcmin, $energy in keV
+
 my $pdl2d = $psf->gettable;
 
 # the following are used by cdfs-extract, see that code for documentation
@@ -135,13 +137,13 @@ sub rotatepsf {
 
 
 
-#   sub frac_in_radius {
-#       my ($self,$radius) = @_;  # radius in arcsec
+sub frac_in_radius {
+    my ($self,$radius) = @_;	# radius in arcsec
 
-#       my $mask = rvals($self->{PSFIMAGE},{squared=>1}) < ($radius*$radius);
+    my $mask = rvals($self->{PSFIMAGE},{squared=>1}) < ($radius*$radius);
 
-#       return( $self->{PSFIMAGE}->where($mask)->sum / 625 );
-#   }
+    return( $self->{PSFIMAGE}->where($mask)->sum / 625 );
+}
 
 
 sub place_in_observation {
@@ -178,6 +180,8 @@ sub eef { # encircled energy fraction
     return( $placed_psf->where($mask)->sum );
 
 }
+
+
 
 
 1;

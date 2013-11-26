@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 #
 
 
@@ -99,27 +99,49 @@ Version 2.61 - 2012/5/16
 move WCS dependance to WCS2
 runs also on hobbes
 
+Version 2.62 - 2013/3
+small clean-up, version used for Stripe-M82
+
+Version 3.0 - 2013/11/12
+on-axis position moved from RA_PNT,DEC_PNT to certain DETX,DETY coordinates
+closer to actual optical-axis. Old behaviour can be retained with --sloppypsf.
+The RA,DEC positions of the optical axis have to be calculated with ecoordconv
+and this is done by external program calconaxis.pl .
+
 =cut
 
 
 use Astro::FITS::Header;
 use PDL;
 use PDL::NiceSlice;
-use Piero::WCS2;
-use Piero::Ftools::Pfiles;
 use Getopt::Long;
+
+use FindBin;
+use lib "$FindBin::Bin/lib";
+use Astro::WCS2;
+use Ftools::Pfiles;
 use FixFitsHdr;
+
+
+$PDL::BIGPDL=1;  #before strict/warnings so that no warning is emitted
 
 use strict;
 use warnings;
 
 
-$PDL::BIGPDL=1;
 
 my ($oldpsf,$pimin,$pimax);
+my $sloppypsf = 0;
 GetOptions('oldpsf' => \$oldpsf,
 	   'pimin=f' => \$pimin,
-	   'pimax=f' => \$pimax );
+	   'pimax=f' => \$pimax,
+	   'sloppypsf' => \$sloppypsf,
+ );
+
+unless ($sloppypsf) {
+    require YAML::Tiny;
+}
+
 
 my $counts_posfile = $ARGV[0];
 my $spectrumfile = $ARGV[1];
@@ -139,7 +161,13 @@ our $pfiles = Pfiles->new; # a global object
 
 # get camera, boresight and position angle
 my $refhdr = rfits($realeventfile,{data=>0});
+# for sure get PA_PNT from header
 my ($RA_PNT,$DEC_PNT,$PA_PNT) = getboresight($refhdr);
+# then if possible get on-axis information from .yaml file
+unless ($sloppypsf) {
+    my ($RA_PNT,$DEC_PNT) = getonaxis($realeventfile);
+}
+
 my $camera = getcamera($refhdr);
 
 my ($counts_mos,$counts_pn,$ra,$dec) = rcols($counts_posfile);
@@ -298,7 +326,11 @@ wfits($sim,$outfile);
 
 
 # fix the header
-fixfitshdr($outfile, $evtheader, $realeventfile, $pfiles, {COPY_XY=>1});
+fixfitshdr($outfile, $evtheader, $realeventfile, $pfiles,
+	   { COPY_XY => 1,
+	     FIXFITSHDR => "$FindBin::Bin/lib/cdfs-sim-fixhdr1.dat",
+	   }
+	  );
 
 
 
@@ -562,6 +594,23 @@ sub round_with_sum {
 
 
 
+sub getonaxis {
+    my $evtfile = shift;
+
+    my $conf = 'onaxis.yaml';
+    die "Cannot find file $conf ; consider using the --sloppypsf option.\n"
+	unless (-e $conf);
+
+    my $yaml = YAML::Tiny->read( $conf );
+
+    my $ra  = $yaml->[0]->{$evtfile}->{RA};
+    my $dec = $yaml->[0]->{$evtfile}->{DEC};
+
+    die "Cannot find on-axis information for event file $evtfile\n"
+	unless (defined($ra) and defined($dec));
+
+    return ($ra,$dec);
+}
 
 
 __END__
