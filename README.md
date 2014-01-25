@@ -71,10 +71,11 @@ If you don't have these files or if you have other versions, please
 download them from the FTP site:
 ftp://xmm.esac.esa.int/pub/ccf/constituents .
 
-For PDL, the easiest way to install it in Linux
-it is from your distribution package manager (e.g. "sudo apt-get
-install pdl" should probably work on Mint and Ubuntu). For the Mac,
-the SciPDL distribution offers a one-click installer (see the PDL
+For PDL, the easiest way to install it in Linux it is from your
+distribution package manager (e.g. "sudo apt-get install pdl" should
+probably work on Mint and Ubuntu, "yum install perl-PDL" in
+RHEL/Centos/SL, "urpmi perl-PDL" on Mageia/Mandriva, etc). For the
+Mac, the SciPDL distribution offers a one-click installer (see the PDL
 site); or otherwise you may use Macports or Fink.  There is no
 particular requirement on the PDL version, so just install whatever
 version your distribution offers.
@@ -98,7 +99,7 @@ may be seen with the command:
 perldoc obsid-sim.pl
 
 Further info is available on the website
-http://www.astro.noa.gr/~ranalli/cdfssim
+http://members.noa.gr/piero.ranalli/simulator
 and, for the theory behind the simulator, on the Ranalli et al. (2013)
 paper.
 

@@ -64,10 +64,12 @@ Installation
 
     For PDL, the easiest way to install it in Linux it is from your
     distribution package manager (e.g. "sudo apt-get install pdl" should
-    probably work on Mint and Ubuntu). For the Mac, the SciPDL distribution
-    offers a one-click installer (see the PDL site); or otherwise you may
-    use Macports or Fink. There is no particular requirement on the PDL
-    version, so just install whatever version your distribution offers.
+    probably work on Mint and Ubuntu, "yum install perl-PDL" in
+    RHEL/Centos/SL, "urpmi perl-PDL" on Mageia/Mandriva, etc). For the Mac,
+    the SciPDL distribution offers a one-click installer (see the PDL site);
+    or otherwise you may use Macports or Fink. There is no particular
+    requirement on the PDL version, so just install whatever version your
+    distribution offers.
 
     To install the simulator, just create a new directory and extract the
     archive in it. (If you are reading this document, probably you have
@@ -80,8 +82,8 @@ Documentation
     perldoc obsid-sim.pl
 
     Further info is available on the website
-    http://www.astro.noa.gr/~ranalli/cdfssim and, for the theory behind the
-    simulator, on the Ranalli et al. (2013) paper.
+    http://members.noa.gr/piero.ranalli/simulator and, for the theory behind
+    the simulator, on the Ranalli et al. (2013) paper.
 
 Running the simulator
     Before running the simulator, you need to have an event file and an
