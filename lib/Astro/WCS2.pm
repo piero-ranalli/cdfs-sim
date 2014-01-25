@@ -20,7 +20,7 @@ WCS2.pm  -- WCS conversion utilities
 
 =cut
 
-package WCS2;
+package Astro::WCS2;
 
 use Carp;
 use Exporter;
