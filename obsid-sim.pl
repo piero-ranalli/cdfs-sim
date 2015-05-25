@@ -3,7 +3,7 @@
 
 
 # the XMM-CDFS simulator of astronomical X-ray observations
-# Copyright (C) 2013 Piero Ranalli
+# Copyright (C) 2013-2015 Piero Ranalli
 # 
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU Affero General Public License as
@@ -328,7 +328,7 @@ wfits($sim,$outfile);
 # fix the header
 fixfitshdr($outfile, $evtheader, $realeventfile, $pfiles,
 	   { COPY_XY => 1,
-	     FIXFITSHDR => "$FindBin::Bin/lib/cdfs-sim-fixhdr1.dat",
+	     FIXHDRDAT => "$FindBin::Bin/lib/cdfs-sim-fixhdr1.dat",
 	   }
 	  );
 
