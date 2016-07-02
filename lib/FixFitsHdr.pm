@@ -138,8 +138,9 @@ sub fixfitshdr {
     $pf = $pfiles->env;  # global
 
     # delete the continue keywords, set creator and exp_id
-    system("$pf fthedit $outfile+0 @$fixhdrdat");
-    system("$pf fthedit $outfile+1 @$fixhdrdat");
+    system(sprintf("%s fthedit %s+0 @%s",$pf, $outfile, $fixhdrdat));
+    system(sprintf("%s fthedit %s+1 @%s",$pf, $outfile, $fixhdrdat));
+    #system("$pf fthedit $outfile+1 @$fixhdrdat");
 
     # aggiungere all'estensione +0 anche le keyword INSTRUME,RA_PNT,DEC_PNT,PA_PNT,DATE-OBS
     my $tmp1 = mktemp('ftoolstmp-XXXXXX');
