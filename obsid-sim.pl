@@ -3,7 +3,7 @@
 
 
 # the XMM-CDFS simulator of astronomical X-ray observations
-# Copyright (C) 2013-2015 Piero Ranalli
+# Copyright (C) 2013-2016 Piero Ranalli
 # 
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU Affero General Public License as
@@ -487,17 +487,20 @@ sub sampletime {
     my $n2 = `$pf fkeyprint $evt+1 NAXIS2 | awk '/NAXIS2  =/ { print \$3}'`;   
     my $samples = $n2 < $counts ? $n2 : $counts;
 
-    open(TIME, "$pf fdump $evt+1 STDOUT TIME 1-".$samples.' prhead=no showcol=no showunit=no showrow=no page=no  | ');
-    my $src_time = rcols(*TIME,{IGNORE=>'/^\s*$/'});
-    close(TIME);
+    my $evttable = rfits($evt.'[1]');
+    my $src_time = $evttable->{TIME};
+    
+#    open(TIME, "$pf fdump $evt+1 STDOUT TIME 1-".$samples.' prhead=no showcol=no showunit=no showrow=no page=no  | ');
+#    my $src_time = rcols(*TIME,{IGNORE=>'/^\s*$/'});
+#    close(TIME);
 #     if ($src_time->dim(0) != $counts->(($i))) {
 # 	die "Not enough photons in $realeventfile,\n from which I'd like to take timestamps.\n";
 #     }
 
     # need to resample?
-    if ($n2 < $counts) {
+#    if ($n2 < $counts) {
 	$src_time = bootstrap($src_time,$counts);
-    }
+#    }
 
     return($src_time);
 }
