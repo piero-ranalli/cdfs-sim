@@ -89,10 +89,12 @@ Running the simulator
     Before running the simulator, you need to have an event file and an
     exposure map: just use any you have around from XMM-Newton observations.
     The camera, pointing position, and roll angle will be taken from the
-    event file, while the exposure will be set by the expmap.
+    event file, while the exposure will be set by the expmap. Here are the
+    steps to follow:
 
-    Then, you need a source list. It is an ascii file with four columns, and
-    one row for each source. The columns are:
+  Source list
+    The source list is an ascii file with four columns, and one row for each
+    source. The columns are:
 
      1. mos count rate
      2. pn count rate
@@ -104,31 +106,57 @@ Running the simulator
     these warnings (unless of course you expected all the sources to fall
     inside the FOV...).
 
-    You need a spectrum: open Xspec (*), define any model, and give the
-    commands:
-
-     XSPEC> iplot model
-     IPLOT> wd spectrum
-
-    and then editing the file spectrum.qdp to remove the commands (READ SERR
-    etc.) at its beginning.
-
     An example source list (counts-pos.dat) and spectrum
     (gamma1.7nh2e20.qdp) are included in the package. (NB the count rates in
     the example list are extremely faint and the positions are in the CDFS -
     it's just to show the file format).
+
+  Source spectrum
+    You need a spectrum for your sources. Currently, all sources are assumed
+    to have the same spectrum, though this might change in the future.
+
+    Open Xspec (*), define any model, and give the commands:
+
+     XSPEC> iplot model
+     IPLOT> wd spectrum
+
+    and then edit the file spectrum.qdp to remove the commands (READ SERR
+    etc.) at its beginning.
 
     (*) Xspec may be obtained together with the Ftools from
     http://heasarc.gsfc.nasa.gov/docs/software/lheasoft/download.html . It
     is not a requisite for running the simulator - just use the example
     spectrum included here for your tests.
 
+  On-axis positions
+    It is not immediate to know what is the RA, DEC position corresponding
+    to the optical axes of the XMM telescopes. In the Ranalli et al. (2013)
+    paper the RA_PNT, DEC_PNT keywords were used; however this may introduce
+    shifts up to 2 arcmin. Therefore it is recommended to get the real
+    boresight position using the SAS task ecoordconv. The program
+    calconaxis.pl, included with the simulator, calls ecoordconv and stores
+    its result in a configuration file (onaxis.yaml), which the simulator
+    will read. So, run it with the syntax:
+
+        ./calconaxis.pl eventfile1.fits ccf.cif sum.sas
+        ./calconaxis.pl eventfile2.fits ccf.cif sum.sas
+        ./calconaxis.pl eventfile3.fits ccf.cif sum.sas
+        ...
+
+    and check that onaxis.yaml has been created. Each step may be slow, but
+    all of them can be run in parallel.
+
+    If, instead, you are fine with the approximated RA_PNT, DEC_PNT
+    positions, you can skip this step, but then use the --sloppypsf option
+    when calling the simulator.
+
+  Run the simulator
     Finally, choose a name for you output file (the simulated event list)
     and call the simulator:
 
      ./obsid-sim.pl \
      counts-positions.dat spectrum.qdp real-event-file.fits \
-     expmap.fits sim.fits [--pimin=2] [--pimax=10]
+     expmap.fits sim.fits [--pimin=2] [--pimax=10] [--sloppypsf]
 
     where the file names may be changed (it is only the order that matters)
     and the square brackets mean that the pimin/pimax parameters are
@@ -217,11 +245,11 @@ Questions and answers
     https://github.com/piero-ranalli/cdfs-sim .
 
 Contact
-     Piero Ranalli
-     National Observatory of Athens
+        Piero Ranalli
+        National Observatory of Athens
 
-     http://www.astro.noa.gr/~ranalli/
-     piero.ranalli@oabo.inaf.it
+        http://www.astro.noa.gr/~ranalli/
+        piero.ranalli@oabo.inaf.it
 
     Please let me know if you try this software! Also, please contact me if
     you need assistance. I can offer only very limited support, but I will

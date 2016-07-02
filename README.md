@@ -146,10 +146,10 @@ future.
 
 Open Xspec (\*), define any model, and give the commands:
 
-    Xspec> iplot model
+    XSPEC> iplot model
     IPLOT> wd spectrum
 
-and then editing the file spectrum.qdp to remove the commands (READ
+and then edit the file spectrum.qdp to remove the commands (READ
 SERR etc.) at its beginning.
 
 
@@ -163,7 +163,7 @@ spectrum included here for your tests.
 
 It is not immediate to know what is the RA, DEC position corresponding
 to the optical axes of the XMM telescopes. In the Ranalli et
-al. (2013) paper the RA_PNT, DEC_PNT keywords were used; however this
+al. (2013) paper the RA\_PNT, DEC\_PNT keywords were used; however this
 may introduce shifts up to 2 arcmin. Therefore it is recommended to
 get the real boresight position using the SAS task ecoordconv. The
 program calconaxis.pl, included with the simulator, calls ecoordconv
@@ -178,12 +178,12 @@ simulator will read. So, run it with the syntax:
 and check that onaxis.yaml has been created. Each step may be slow,
 but all of them can be run in parallel.
 
-If, instead, you are fine with the approximated RA_PNT, DEC_PNT
+If, instead, you are fine with the approximated RA\_PNT, DEC\_PNT
 positions, you can skip this step, but then use the --sloppypsf option
 when calling the simulator.
 
 
-## Run the sumulator
+## Run the simulator
 
 
 
@@ -317,11 +317,10 @@ https://github.com/piero-ranalli/cdfs-sim .
 
 
     Piero Ranalli
-    National Observatory of Athens
+    Lund Observatory
 
-    http://www.astro.noa.gr/~ranalli/
-    piero.ranalli@oabo.inaf.it
-
+    http://www.astro.lu.se/~piero
+    piero.ranalli@astro.lu.se
 
 
 Please let me know if you try this software!  Also, please contact me
