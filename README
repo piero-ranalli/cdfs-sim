@@ -82,7 +82,7 @@ Documentation
     perldoc obsid-sim.pl
 
     Further info is available on the website
-    http://members.noa.gr/piero.ranalli/simulator and, for the theory behind
+    http://www.astro.lu.se/~piero/simulator and, for the theory behind
     the simulator, on the Ranalli et al. (2013) paper.
 
 Running the simulator

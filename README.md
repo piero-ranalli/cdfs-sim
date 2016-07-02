@@ -99,7 +99,7 @@ may be seen with the command:
 perldoc obsid-sim.pl
 
 Further info is available on the website
-http://members.noa.gr/piero.ranalli/simulator
+http://www.astro.lu.se/~piero/simulator
 and, for the theory behind the simulator, on the Ranalli et al. (2013)
 paper.
 
